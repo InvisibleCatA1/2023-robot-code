@@ -5,6 +5,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
@@ -14,6 +15,7 @@ import edu.wpi.first.networktables.DoubleArrayEntry
 import edu.wpi.first.networktables.DoubleEntry
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.util.WPIUtilJNI
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.VisionUtils
 import frc.robot.constants.DrivetrainConstants
@@ -98,11 +100,11 @@ class SwerveSubsystem: SubsystemBase() {
 
         //Coen's Vision Lineup Thing:
         // find the botpose network table id thingy, construct a pose2d, feed it into resetodometry
-//        val botpose: DoubleArray = limelightTable.getDoubleArray("botpose", DoubleArray(0))
-//        if (!botpose.contentEquals(DoubleArray(0))) {
-//            val pose = Pose2d(Translation2d(botpose[0], botpose[2]), Rotation2d(botpose[3], botpose[5]))
-//            resetOdometry(pose)
-//        }
+        val botpose: DoubleArray = limelightTable.getDoubleArray("botpose", DoubleArray(0))
+        if (!botpose.contentEquals(DoubleArray(0))) {
+            val pose = Pose2d(Translation2d(botpose[0], botpose[2]), Rotation2d(botpose[3], botpose[5]))
+            odometry.addVisionMeasurement(pose, Timer.getFPGATimestamp())
+        }
 
         //Set Network Tables Telemetry
         actualTelemetry.set(doubleArrayOf(
