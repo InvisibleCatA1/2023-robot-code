@@ -6,4 +6,4 @@
 
 
 ### Contributing:
-TODO
+I am not writing all of this
