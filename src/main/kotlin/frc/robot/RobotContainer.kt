@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.commands.*
 import frc.robot.constants.DrivetrainConstants
 import frc.robot.subsystems.*
+import javax.xml.crypto.dsig.XMLObject
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -110,9 +111,12 @@ class RobotContainer {
             }
 
             val visionCommand = if (piece == Piece.CONE) {
-                AlignToCone(swerveSubsystem, primaryController)
+                // TODO: Write the outher align to fix this...
+                AlignToTarget(swerveSubsystem)
             } else {
-                AlignToCube(swerveSubsystem, secondaryController)
+                // TODO: Write the outher align to fix this...
+                AlignToTarget(swerveSubsystem)
+
             }
 
             ParallelCommandGroup(
@@ -140,7 +144,9 @@ class RobotContainer {
             }
 
             val visionCommand = if (piece == Piece.CONE) {
-                AlignToRetroreflective(swerveSubsystem, primaryController)
+//                AlignToRetroreflective(swerveSubsystem, primaryController)
+                AlignToAprilTag(swerveSubsystem, secondaryController)
+
             } else {
                 AlignToAprilTag(swerveSubsystem, secondaryController)
             }
@@ -200,6 +206,8 @@ class RobotContainer {
                 true,
                 true
             ))
+
+
 //TODO: The alignment to apriltag needs to happen before the pick and place command in sequential command order
 //TODO: The alignment to apriltag needs to change to pegs for certain cases, or that needs to be added in in a different way cause right now, it would only place for cube shelves
 
@@ -214,6 +222,12 @@ class RobotContainer {
         JoystickButton(primaryController, XboxController.Button.kY.value).whileTrue(
             RunCommand({
                 swerveSubsystem.zeroGyroAndOdometry()
+            })
+        )
+
+        JoystickButton(primaryController, XboxController.Button.kA.value).whileTrue(
+            RunCommand({
+                AlignToTarget(swerveSubsystem)
             })
         )
         //Place:

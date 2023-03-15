@@ -104,6 +104,11 @@ object DrivetrainConstants {
     const val turningMinOutput = -1.0
     const val turningMaxOutput = 1.0
 
+    // Alignment PID:
+    const val alignP = 0.06
+    const val alignI = 0.0
+    const val alignD = 0.0
+
     // Idle mode for driving and turning motor
     val drivingMotorIdleMode = CANSparkMax.IdleMode.kCoast
     val turningMotorIdleMode = CANSparkMax.IdleMode.kBrake
