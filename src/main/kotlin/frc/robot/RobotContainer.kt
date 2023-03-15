@@ -3,14 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.wpilibj.I2C
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 
 
 import edu.wpi.first.wpilibj.XboxController.Axis
 import edu.wpi.first.wpilibj2.command.*
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 
 import frc.robot.commands.*
@@ -29,6 +30,7 @@ class RobotContainer {
     val secondaryController = XboxController(1)
     val pickAndPlace = PickAndPlaceSubsystem()
     val swerveSubsystem = SwerveSubsystem()
+    val gyroSubsystem = GyroSubsystem(AHRS(I2C.Port.kMXP))
     val trajectories = Trajectories(pickAndPlace, swerveSubsystem)
     val testTrajectories = AutoTrajectories(pickAndPlace, swerveSubsystem)
     var cube: Boolean = false
@@ -111,11 +113,11 @@ class RobotContainer {
             }
 
             val visionCommand = if (piece == Piece.CONE) {
-                // TODO: Write the outher align to fix this...
-                AlignToTarget(swerveSubsystem)
+                // TODO: Tune values
+                AlignToTarget(swerveSubsystem, gyroSubsystem, false, 10.0)
             } else {
-                // TODO: Write the outher align to fix this...
-                AlignToTarget(swerveSubsystem)
+                // TODO: Tune values
+                AlignToTarget(swerveSubsystem, gyroSubsystem, false, 10.0)
 
             }
 
@@ -145,10 +147,10 @@ class RobotContainer {
 
             val visionCommand = if (piece == Piece.CONE) {
 //                AlignToRetroreflective(swerveSubsystem, primaryController)
-                AlignToAprilTag(swerveSubsystem, secondaryController)
+                AlignToRetroreflective(swerveSubsystem, gyroSubsystem, primaryController)
 
             } else {
-                AlignToAprilTag(swerveSubsystem, secondaryController)
+                AlignToCube(swerveSubsystem, gyroSubsystem, primaryController)
             }
 
             ParallelCommandGroup(
@@ -227,7 +229,7 @@ class RobotContainer {
 
         JoystickButton(primaryController, XboxController.Button.kA.value).whileTrue(
             RunCommand({
-                AlignToTarget(swerveSubsystem)
+                AlignToTarget(swerveSubsystem, gyroSubsystem)
             })
         )
         //Place:

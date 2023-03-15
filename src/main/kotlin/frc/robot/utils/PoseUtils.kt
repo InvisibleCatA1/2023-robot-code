@@ -26,11 +26,11 @@ class PoseUtils {
         var rotationOut = rotationPID.calculate(current.rotation.angle, target.rotation.angle)
         if (drivePID.atGoal()) rotationOut = 0.0
 
-        val driveVelocity = Pose2d(Translation2d(), current.translation.minus(target.translation).toTranslation2d().angle).transformBy(
+        val drive = Pose2d(Translation2d(), current.translation.minus(target.translation).toTranslation2d().angle).transformBy(
             Transform2d(Translation2d(forwardOut, 0.0), Rotation2d())
         )
 
-        driveSubsystem.drive(driveVelocity.x, driveVelocity.y, rotationOut, false, true)
+        driveSubsystem.drive(drive.x, drive.y, rotationOut, false, true)
 
     }
 }

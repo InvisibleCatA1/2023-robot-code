@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units
 import edu.wpi.first.networktables.NetworkTable
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
+import frc.robot.utils.NetworkTableUtils
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -58,7 +59,7 @@ object VisionUtils {
     }
 
     fun getLimelightNTTable(tableName: String?): NetworkTable {
-        return NetworkTableInstance.getDefault().getTable(sanitizeName(tableName))
+        return NetworkTableUtils(sanitizeName(tableName)).getTable()
     }
 
     fun getLimelightNTTableEntry(tableName: String?, entryName: String?): NetworkTableEntry {
